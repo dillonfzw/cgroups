@@ -29,8 +29,8 @@ class Cgroup(object):
             self.user = getpass.getuser()
         # Get hierarchies
         if hierarchies == 'all':
-            hierachies = HIERARCHIES
-        self.hierarchies = [h for h in hierachies if h in HIERARCHIES]
+            hierarchies = HIERARCHIES
+        self.hierarchies = [h for h in hierarchies if h in HIERARCHIES]
         # Get user cgroups
         self.user_cgroups = {}
         system_hierarchies = os.listdir(BASE_CGROUPS)
@@ -40,7 +40,7 @@ class Cgroup(object):
                     "Hierarchy %s is not mounted" % hierarchy)
             user_cgroup = os.path.join(BASE_CGROUPS, hierarchy, self.user)
             self.user_cgroups[hierarchy] = user_cgroup
-        create_user_cgroups(self.user, script=False)
+        create_user_cgroups(self.user, script=False, hierarchies=self.hierarchies)
         # Create name cgroups
         self.cgroups = {}
         for hierarchy, user_cgroup in self.user_cgroups.items():

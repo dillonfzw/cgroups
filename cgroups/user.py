@@ -26,17 +26,18 @@ def get_user_info(user):
     return uid, gid
 
 
-def create_user_cgroups(user, script=True):
+def create_user_cgroups(user, script=True, hierarchies=[]):
     logger.info('Creating cgroups sub-directories for user %s' % user)
     # Get hierarchies and create cgroups sub-directories
-    try:
-        hierarchies = os.listdir(BASE_CGROUPS)
-    except OSError as e:
-        if e.errno == 2:
-            raise CgroupsException(
-                "cgroups filesystem is not mounted on %s" % BASE_CGROUPS)
-        else:
-            raise OSError(e)
+    if len(hierarchies) == 0:
+        try:
+            hierarchies = os.listdir(BASE_CGROUPS)
+        except OSError as e:
+            if e.errno == 2:
+                raise CgroupsException(
+                    "cgroups filesystem is not mounted on %s" % BASE_CGROUPS)
+            else:
+                raise OSError(e)
     logger.debug('Hierarchies availables: %s' % hierarchies)
     for hierarchy in hierarchies:
         user_cgroup = os.path.join(BASE_CGROUPS, hierarchy, user)
