@@ -62,7 +62,7 @@ class Cgroup(object):
             with open(tasks_file, 'r+') as f:
                 tasks = f.read().split('\n')
             user_tasks_file =  self._get_user_file(hierarchy, 'tasks')
-            with open(user_tasks_file, 'a+') as f:
+            with open(user_tasks_file, 'a') as f:
                 f.write('\n'.join(tasks))
             os.rmdir(cgroup)
 
@@ -78,7 +78,7 @@ class Cgroup(object):
             with open(tasks_file, 'r+') as f:
                 cgroups_pids = f.read().split('\n')
             if not str(pid) in cgroups_pids:
-                with open(tasks_file, 'a+') as f:
+                with open(tasks_file, 'a') as f:
                     f.write('%s\n' % pid)
 
     def remove(self, pid):
@@ -92,7 +92,7 @@ class Cgroup(object):
                 pids = f.read().split('\n')
                 if str(pid) in pids:
                     user_tasks_file = self._get_user_file(hierarchy, 'tasks')
-                    with open(user_tasks_file, 'a+') as f:
+                    with open(user_tasks_file, 'a') as f:
                         f.write('%s\n' % pid)
 
     @property
@@ -127,7 +127,7 @@ class Cgroup(object):
         if 'cpu' in self.cgroups:
             value = self._format_cpu_value(limit)
             cpu_shares_file = self._get_cgroup_file('cpu', 'cpu.shares')
-            with open(cpu_shares_file, 'w+') as f:
+            with open(cpu_shares_file, 'w') as f:
                 f.write('%s\n' % value)
         else:
             raise CgroupsException(
@@ -174,7 +174,7 @@ class Cgroup(object):
             value = self._format_memory_value(unit, limit)
             memory_limit_file = self._get_cgroup_file(
                 'memory', 'memory.limit_in_bytes')
-            with open(memory_limit_file, 'w+') as f:
+            with open(memory_limit_file, 'w') as f:
                 f.write('%s\n' % value)
         else:
             raise CgroupsException(
